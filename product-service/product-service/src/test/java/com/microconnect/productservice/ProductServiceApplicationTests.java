@@ -1,7 +1,8 @@
 package com.microconnect.productservice;
 
 import com.microconnect.productservice.dto.ProductRequest;
-import com.microconnect.productservice.dto.ProductResponse;
+import com.microconnect.productservice.repository.ProductRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
@@ -31,6 +31,9 @@ class ProductServiceApplicationTests {
 	@Autowired
 	MockMvc mockMvc;
 
+	@Autowired
+	ProductRepository productRepository;
+
 	@DynamicPropertySource
 	static void setProperties(DynamicPropertyRegistry properties)
 	{
@@ -46,8 +49,11 @@ class ProductServiceApplicationTests {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(productRequest)))
 			.andExpect(status().isCreated());
-
+		Assertions.assertEquals(1, productRepository.findAll().size());
 	}
+
+	//TODO implement test for other service
+
 
 	private ProductRequest getProductRequest() {
 		return ProductRequest.builder()
@@ -56,6 +62,9 @@ class ProductServiceApplicationTests {
 				.description("don't buy if you want to save money, buy if you want to save your privacy")
 				.build();
 	}
+
+
+
 
 
 }

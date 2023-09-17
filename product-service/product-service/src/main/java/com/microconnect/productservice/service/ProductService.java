@@ -3,7 +3,7 @@ package com.microconnect.productservice.service;
 import com.microconnect.productservice.dto.ProductRequest;
 import com.microconnect.productservice.dto.ProductResponse;
 import com.microconnect.productservice.model.Product;
-import com.microconnect.productservice.repository.ProductRepostory;
+import com.microconnect.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class ProductService {
 
-    private final ProductRepostory productRepostory;
+    private final ProductRepository productRepository;
 
     /**
      * Here constructor injection is done by Lombok annotation.
@@ -34,11 +34,11 @@ public class ProductService {
                 .build();
 
         log.info("Product {} is saved", product.getId());
-        productRepostory.save(product);
+        productRepository.save(product);
     }
 
     public List<ProductResponse> getProduct() {
-        List<Product> products= productRepostory.findAll();
+        List<Product> products= productRepository.findAll();
        return products.stream().map(this::mapToProductResponse).toList();
     }
 
